@@ -3,7 +3,7 @@ from sqlalchemy.types import Boolean, Numeric
 from sqlalchemy.orm import declarative_base
 
 Base = declarative_base()
-engine = create_engine('mysql+pymysql://root:toolbox@127.0.0.1:3306/PizzaShop', echo=True)
+engine = create_engine('mysql+pymysql://root:toolbox@localhost/PizzaShop', echo=True)
 
 class Customers(Base): 
     __tablename__ = 'customers'
@@ -101,61 +101,3 @@ class DeliveryPersonnel(Base):
 #---------------------------------------
 Base.metadata.create_all(engine)
 
-with engine.connect() as conn:
-    conn.execute(
-        insert(Pizza),#calculate margins
-        [
-            {'pizza_name': 'Marry Me Margherita', "pizza_price": 9.00}, # 4.00 for base, sauce is 2.00, cheese 3.00
-            {'pizza_name': 'Perfect Pepperoni', "pizza_price": 10.99},
-            {'pizza_name': 'Voluptuous Vegetarian', "pizza_price": 13.50},# peppers, mushrooms, red onions
-            {'pizza_name': 'Angsty Anchovie', "pizza_price": 10.99},
-            {'pizza_name': 'Sizzling Salami', "pizza_price": 10.99},
-            {'pizza_name': 'Meatlovers', "pizza_price": 18.95}, # ham, bacon, salami, pepeproni, sausage (1.99 * 5)
-            {'pizza_name': 'Kiss of the Sea', "pizza_price": 14.97}, # calamari, anchovies, prawns (1.99 * 3)
-            {'pizza_name': 'BBQ Chicken', "pizza_price": 12.98},# bbq chicken, onions (1.99 * 2)
-            {'pizza_name': 'Sexy Showarma', "pizza_price": 10.99},# showarma
-            {'pizza_name': 'Salami-roni Pizza', "pizza_price": 12.98},# salami, pepperoni(1.99 * 2)
-        ]
-    )
-    conn.execute(
-        insert(Desserts), #calculate margins
-        [
-            {'dessert_type': 'Tiramisu', "dessert_cost": 4.99},
-            {'dessert_type': 'Canoli', "dessert_cost": 5.99},
-            {'dessert_type': 'Cheesecake', "dessert_cost": 5.99},
-        ]
-    )
-    conn.execute(
-        insert(Drinks),# calculate
-        [
-            {'drink_type': 'Water', "drink_cost": 2.99},
-            {'drink_type': 'Coca Cola', "drink_cost": 3.99},
-            {'drink_type': 'Pepsi', "drink_cost": 3.98},
-            {'drink_type': 'Chocolate Milk', "drink_cost": 3.50},
-            {'drink_type': 'Fanta', "drink_cost": 3.97},
-        ]
-    )
-    conn.execute(
-        insert(Ingredients),
-        [
-            {'ingredient_name': 'Cheese', "ingredient_cost": 2.00},
-            {'ingredient_name': 'Crust', "ingredient_cost": 5.00},
-            {'ingredient_name': 'Tomato sauce', "ingredient_cost": 2.00},
-            {'ingredient_name': 'Pineapple', "ingredient_cost": 1.99},
-            {'ingredient_name': 'Anchovies', "ingredient_cost": 1.99},
-            {'ingredient_name': 'Pepperoni', "ingredient_cost": 1.99},
-            {'ingredient_name': 'Salami', "ingredient_cost": 1.99},
-            {'ingredient_name': 'Mushrooms', "ingredient_cost": 1.50},
-            {'ingredient_name': 'Peppers', "ingredient_cost": 1.50},
-            {'ingredient_name': 'Red Onions', "ingredient_cost": 1.50},
-            {'ingredient_name': 'Onions', "ingredient_cost": 1.50},
-            {'ingredient_name': 'Jalapenos', "ingredient_cost": 1.50},
-            {'ingredient_name': 'Sausage', "ingredient_cost": 1.99},
-            {'ingredient_name': 'Ham', "ingredient_cost": 1.99},
-            {'ingredient_name': 'Prawns', "ingredient_cost": 1.99},
-            {'ingredient_name': 'BBQ Chicken', "ingredient_cost": 1.99},
-            {'ingredient_name': 'Shawarma', "ingredient_cost": 1.99},
-            
-        ]
-    )
-    conn.commit()
