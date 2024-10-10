@@ -14,8 +14,8 @@ class OrderProcessing:
     
     def place_order(self, pizzas, drinks=None, desserts=None, delivery_address=None):
         # Ensure the order includes at least one pizza
-        if not pizzas:
-            raise ValueError("Order must include at least one pizza.")
+        #if not pizzas:
+            #raise ValueError("Order must include at least one pizza.")
         
         # Calculate total price
         order_total = 0
@@ -71,7 +71,7 @@ class OrderProcessing:
         
         session.commit()
 
-        return f"Order placed successfully! Your total is ${order_total:.2f}. Estimated delivery time: 30 minutes."
+        #return f"Order placed successfully! Your total is ${order_total:.2f}. Estimated delivery time: 30 minutes."
 
     def confirm_order(self, order_id):
         """

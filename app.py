@@ -16,29 +16,30 @@ def login_page():
 
 @app.route('/mainmenu')
 def mainmenu():
-    if 'user_id' in session:  # Check if the user is logged in
-        return render_template('mainmenu.html')  # Show the main menu page
+    if 'user_id' in session:
+        order = session.get('order', {'pizzas': [], 'drinks': [], 'desserts': []})  # Get order or empty
+        return render_template('mainmenu.html', order=order)  
     else:
         return redirect('/')
 
 @app.route('/pizza_menu')
 def pizza_menu():
-    if 'user_id' in session:  # Ensure user is logged in
-        return render_template('pizza_menu.html')  # Show the pizza menu
+    if 'user_id' in session: 
+        return render_template('pizza_menu.html')  
     else:
         return redirect('/')
 
 @app.route('/drink_menu')
 def drink_menu():
-    if 'user_id' in session:  # Ensure user is logged in
-        return render_template('drink_menu.html')  # Show the drink menu
+    if 'user_id' in session:  
+        return render_template('drink_menu.html')  
     else:
         return redirect('/')
 
 @app.route('/dessert_menu')
 def dessert_menu():
-    if 'user_id' in session:  # Ensure user is logged in
-        return render_template('dessert_menu.html')  # Show the dessert menu
+    if 'user_id' in session:  
+        return render_template('dessert_menu.html')  
     else:
         return redirect('/')
 
@@ -48,8 +49,8 @@ def add_pizza():
     if 'order' not in session:
         session['order'] = {'pizzas': [], 'drinks': [], 'desserts': []}
     session['order']['pizzas'].append(pizza)
-    #flash(f'Added {pizza} pizza to your order!', 'success')
-    return redirect('/pizza_menu')
+    flash(f'Added {pizza} pizza to your order!', 'success')  # Flash message
+    return redirect('/mainmenu')  # Redirect to main menu to see updated order
 
 @app.route('/add_drink', methods=['POST'])
 def add_drink():
@@ -57,8 +58,8 @@ def add_drink():
     if 'order' not in session:
         session['order'] = {'pizzas': [], 'drinks': [], 'desserts': []}
     session['order']['drinks'].append(drink)
-    #flash(f'Added {drink} to your order!', 'success')
-    return redirect('/drink_menu')
+    flash(f'Added {drink} to your order!', 'success')  # Flash message
+    return redirect('/mainmenu')  # Redirect to main menu to see updated order
 
 @app.route('/add_dessert', methods=['POST'])
 def add_dessert():
@@ -66,15 +67,14 @@ def add_dessert():
     if 'order' not in session:
         session['order'] = {'pizzas': [], 'drinks': [], 'desserts': []}
     session['order']['desserts'].append(dessert)
-    #flash(f'Added {dessert} to your order!', 'success')
-    return redirect('/dessert_menu')
+    flash(f'Added {dessert} to your order!', 'success')  # Flash message
+    return redirect('/mainmenu')  # Redirect to main menu to see updated order
 
 @app.route('/order')
 def order_summary():
     if 'order' in session:
         return render_template('order_summary.html', order=session['order'])
     else:
-        #flash('Your order is empty!', 'danger')
         return redirect('/mainmenu')
 
 @app.route('/login', methods=['POST'])
@@ -87,7 +87,6 @@ def login_user():
     if user:
         session['user_id'] = user.customer_id
         session['username'] = user.username 
-        #flash('Login successful!', 'success')
         return redirect('/mainmenu') 
     else:
         flash('Invalid username or password!', 'danger')
@@ -104,11 +103,23 @@ def signup():
 
         if signUp.signUp(full_name, username, password, birthday, postal_code):
             flash('Sign up successful! You can now log in.', 'success')
-            return redirect('/')
+            return redirect('/')  
         else:
             flash('Username is already taken. Try a different one.', 'danger')
 
     return render_template('signup.html')
+
+@app.route('/remove_item', methods=['POST'])
+def remove_item():
+    item_type = request.form['item_type']
+    item_name = request.form['item_name']
+    
+    if 'order' in session:
+        if item_type in session['order']:
+            session['order'][item_type] = [item for item in session['order'][item_type] if item != item_name]
+    
+    flash(f'Removed {item_name} from your order!', 'success')
+    return redirect('/mainmenu')  # Redirect back to the main menu
 
 def check_birthday_discounts():
     if 'user_id' in session:
