@@ -98,6 +98,7 @@ class DeliveryPersonnel(Base):
     postal_code_assigned = Column(String(10), nullable=False)  # Assigned area of delivery
     is_available = Column(Boolean, default=True)  # Whether the person is available for delivery
     next_available_time = Column(DateTime, nullable=True)  # When they'll be available next
+    
 #---------------------------------------
 Base.metadata.create_all(engine)
 

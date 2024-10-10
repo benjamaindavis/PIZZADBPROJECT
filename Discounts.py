@@ -1,5 +1,5 @@
 from sqlalchemy import create_engine, insert, select, DateTime, update, or_
-from tables import Base, Customers, Order, Drinks, Pizza, OrderDrink, Discount
+from tables import Base, Customers, CustomerOrder, Drinks, Pizza, OrderDrink, Discount
 from datetime import datetime
 from decimal import Decimal
 import random, string
@@ -86,7 +86,7 @@ class Discounts:
             if Discounts.check_birthday(customer_id):
                 
                 order = conn.execute(
-                    select(Order).where(Order.order_id == order_id)
+                    select(CustomerOrder).where(CustomerOrder.order_id == order_id)
                 ).fetchone()
 
                 if order:
@@ -110,7 +110,7 @@ class Discounts:
                         new_total = current_total - discount_amount
 
                         conn.execute(
-                            update(Order).where(Order.order_id == order_id).values(order_total=new_total)
+                            update(CustomerOrder).where(CustomerOrder.order_id == order_id).values(order_total=new_total)
                         )
                         conn.commit()
 
