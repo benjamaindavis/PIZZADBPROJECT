@@ -61,7 +61,8 @@ class CustomerOrder(Base):
     order_total = Column(Numeric(7, 2))
     delivery_address = Column(String(50))
     cancel_time = Column(Boolean)  # True if customer cancels (5 min limit)
-    delivery_time_minutes = Column(Integer)
+    #delivery_time_minutes = Column(Integer) remove in final product
+    order_datetime = Column(DateTime) # drop db and ad alter
 
 class OrderPizza(Base):
     __tablename__ = 'orderpizza'

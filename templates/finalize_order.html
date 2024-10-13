@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finalize Order</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 500px;
+        }
+
+        h1 {
+            font-family: 'Lobster', cursive;
+            margin-bottom: 30px;
+        }
+
+        .order-summary {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .total-price {
+            font-weight: bold;
+            font-size: 20px;
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+            color: white;
+            margin: 20px 0;
+        }
+
+        .pay-button {
+            background-color: #28a745;
+        }
+
+        .pay-button:hover {
+            background-color: #218838;
+        }
+
+        .cancel-button {
+            background-color: #dc3545;
+        }
+
+        .cancel-button:hover {
+            background-color: #c82333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Finalize Your Order</h1>
+        <div class="order-summary">
+            <h2>Order Summary:</h2>
+            <div id="order-items">
+                {% if order.pizzas %}
+                    {% for pizza in order.pizzas %}
+                        <div class="order-item">
+                            <span>{{ format_item_name(pizza) }}</span>
+                            <span>$0.00</span> <!-- Replace with actual price -->
+                        </div>
+                    {% endfor %}
+                {% endif %}
+                {% if order.drinks %}
+                    {% for drink in order.drinks %}
+                        <div class="order-item">
+                            <span>{{ format_item_name(drink)}}</span>
+                            <span>$0.00</span> <!-- Replace with actual price -->
+                        </div>
+                    {% endfor %}
+                {% endif %}
+                {% if order.desserts %}
+                    {% for dessert in order.desserts %}
+                        <div class="order-item">
+                            <span>{{ format_item_name(dessert) }}</span>
+                            <span>$0.00</span> <!-- Replace with actual price -->
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+            <div class="total-price">Total: $0.00</div> <!-- Replace with calculated total -->
+        </div>
+
+        <!-- Payment confirmation -->
+        <form method="POST" action="/finalize_order">
+            <button type="submit" class="pay-button">OK</button>
+            <button type="button" class="cancel-button" onclick="location.href='/mainmenu'">Cancel</button>
+        </form>        
+    </div>
+</body>
+</html>
