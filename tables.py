@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Integer, String, DateTime, create_engine, ForeignKey, insert
 from sqlalchemy.types import Boolean, Numeric
 from sqlalchemy.orm import declarative_base
+from sqlalchemy.dialects.mysql import DECIMAL
 
 Base = declarative_base()
 engine = create_engine('mysql+pymysql://root:toolbox@localhost/PizzaShop', echo=True)
@@ -9,13 +10,13 @@ class Customers(Base):
     __tablename__ = 'customers'
     
     customer_id = Column(Integer, primary_key=True, autoincrement=True)
-    full_name = Column(String(50))  # Identification
-    username = Column(String(50), unique=True)  # Login info
-    password = Column(String(100))  # Longer for hashing
-    birthday = Column(DateTime)  # For discounts
-    pizza_count = Column(Integer)  # For discounts
-    postal_code = Column(String(10))  # Address data
-    pizza_discount_code = Column(String(10), nullable=True)  # Optional discount code
+    full_name = Column(String(50))  
+    username = Column(String(50), unique=True)  
+    password = Column(String(100))  
+    birthday = Column(DateTime)  
+    pizza_count = Column(Integer)  
+    postal_code = Column(String(10))  
+    pizza_discount_code = Column(String(10), nullable=True)  
 
 class Discount(Base):
     __tablename__ = 'discounts'
@@ -30,38 +31,36 @@ class Pizza(Base): # no more vegan or vegetarian options
 
     pizza_id = Column(Integer, primary_key=True, autoincrement=True)
     pizza_name = Column(String(50))
-    pizza_price = Column(Numeric(5, 2))
+    pizza_price = Column(DECIMAL(5, 2))
 
 class Drinks(Base):
     __tablename__ = 'drinks'
 
     drink_id = Column(Integer, primary_key=True, autoincrement=True)
     drink_type = Column(String(50), unique=True)
-    drink_cost = Column(Numeric(5, 2))
+    drink_cost = Column(DECIMAL(5, 2))
 
 class Desserts(Base):
     __tablename__ = 'desserts'
 
     dessert_id = Column(Integer, primary_key=True, autoincrement=True)
     dessert_type = Column(String(50), unique=True)
-    dessert_cost = Column(Numeric(5, 2))
+    dessert_cost = Column(DECIMAL(5, 2))
 
 class Ingredients(Base): # no more vegan/ vegetarian
     __tablename__ = 'ingredients'
 
     ingredient_id = Column(Integer, primary_key=True, autoincrement=True)
     ingredient_name = Column(String(50))
-    ingredient_cost = Column(Numeric(5, 2))
+    ingredient_cost = Column(DECIMAL(5, 2))
 
 class CustomerOrder(Base):
     __tablename__ = 'customerorder'
 
     order_id = Column(Integer, primary_key=True, autoincrement=True)
-    customer_id = Column(Integer, ForeignKey('customers.customer_id'))
-    order_total = Column(Numeric(7, 2))
-    delivery_address = Column(String(50))
-    cancel_time = Column(Boolean)  # True if customer cancels (5 min limit)
-    #delivery_time_minutes = Column(Integer) remove in final product
+    username = Column(String(50), ForeignKey('customers.username'))
+    order_total = Column(DECIMAL(7, 2))
+    postal_code = Column(String(50))
     order_datetime = Column(DateTime) # drop db and ad alter
 
 class OrderPizza(Base):
@@ -96,11 +95,14 @@ class DeliveryPersonnel(Base):
 
     personnel_id = Column(Integer, primary_key=True, autoincrement=True)
     full_name = Column(String(50), nullable=False)
-    postal_code_assigned = Column(String(10), nullable=False)  # Assigned area of delivery
-    is_available = Column(Boolean, default=True)  # Whether the person is available for delivery
-    next_available_time = Column(DateTime, nullable=True)  # When they'll be available next
+    postal_code_assigned = Column(String(10), nullable=False) 
+    is_available = Column(Boolean, default=True)  
+    next_available_time = Column(DateTime, nullable=True)  
+
     
 #---------------------------------------
 Base.metadata.create_all(engine)
+
+
 
 

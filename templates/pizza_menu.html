@@ -3,11 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Main Menu</title>
-    <link href="https://fonts.googleapis.com/css2?family=Lobster&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <title>Pizza Menu</title>
     <style>
         body {
-            font-family: 'Roboto', sans-serif;
+            font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
             height: 100vh;
@@ -23,94 +22,44 @@
             padding: 30px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            position: relative;
-            width: 600px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
         }
 
-        button {
-            padding: 15px 30px;
+        select, input[type="submit"] {
+            padding: 10px;
             margin: 10px;
-            border: none;
+            font-size: 16px;
             border-radius: 5px;
-            cursor: pointer;
-            font-size: 18px;
-            color: white;
-        }
-
-        button:hover {
-            opacity: 0.9;
+            border: 1px solid #ccc;
         }
 
         h1 {
-            margin-bottom: 30px;
-            font-family: 'Lobster', cursive;
-        }
-
-        .add-button {
-            background-color: #ff7f50;
-        }
-
-        .add-button:hover {
-            background-color: #ff6347;
-        }
-
-        .finalize-button {
-            background-color: #28a745;
-        }
-
-        .finalize-button:hover {
-            background-color: #218838;
-        }
-
-        .cart-button {
-            background-color: #007bff;
-        }
-
-        .cart-button:hover {
-            background-color: #0056b3;
-        }
-
-        .logout {
-            background-color: #dc3545;
-        }
-
-        .logout:hover {
-            background-color: #c82333;
-        }
-
-        .btn-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .btn-container button {
-            margin: 0 10px;
-        }
-
-        .main-buttons {
             margin-bottom: 20px;
         }
     </style>
 </head>
-<body> 
+<body>
     <div class="container">
-        <h1>Welcome to MAASsive Pizza!</h1>
-        
-        <div class="main-buttons">
-            <button class="add-button" onclick="location.href='/pizza_menu'">Add Pizza</button>
-            <button class="add-button" onclick="location.href='/drink_menu'">Add Drink</button>
-            <button class="add-button" onclick="location.href='/dessert_menu'">Add Dessert</button>
-        </div>
+        <h1>Select Your Pizza</h1>
+        <form action="/add_pizza" method="post">
+            <label for="pizza">Choose a pizza:</label>
+            <select name="pizza" id="pizza">
+                <option value="Marry Me Margherita">Marry Me Margherita ($15.26)</option>
+                <option value="Perfect Pepperoni">Perfect Pepperoni ($16.78)</option>
+                <option value="Voluptuous Vegetarian">Voluptuous Vegetarian ($20.60)</option>
+                <option value="Angsty Anchovie">Angsty Anchovie ($16.78)</option>
+                <option value="Sizzling Salami">Sizzling Salami ($16.78)</option>
+                <option value="Meatlovers">Meatlovers ($28.92)</option>
+                <option value="Kiss of the Sea">Kiss of the Sea ($22.85)</option>
+                <option value="BBQ Chicken">BBQ Chicken ($12.96)</option>
+                <option value="Sexy Showarma">Sexy Showarma ($13.72)</option>
+                <option value="Salami-roni Pizza">Salami-roni Pizza ($19.81)</option>
 
-        <div class="btn-container">
-            <button class="cart-button" onclick="location.href='/cart'">Cart</button>
-            <button class="finalize-button" onclick="location.href='/finalize_order'">Finalize Order</button>
-            <button type="button" class="logout" onclick="window.location.href='/logout'">Logout</button>
-        </div>
+            </select>
+            <br>
+            <input type="submit" value="Add Pizza">
+        </form>
+
+        <button onclick="location.href='/mainmenu'">Back to Main Menu</button>
     </div>
 </body>
 </html>

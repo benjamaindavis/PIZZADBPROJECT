@@ -11,8 +11,6 @@ class DeliveryManagement:
         if order:
             order.status = new_status
             self.session.commit()
-            return f"Order {order_id} status updated to {new_status}."
-        return f"Order {order_id} not found."
 
     def cancel_order(self, order_id):
         order = self.session.query(CustomerOrder).filter_by(order_id=order_id).first()
