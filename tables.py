@@ -10,7 +10,8 @@ class Customers(Base):
     __tablename__ = 'customers'
     
     customer_id = Column(Integer, primary_key=True, autoincrement=True)
-    full_name = Column(String(50))  
+    full_name = Column(String(50)) 
+    gender = Column(String(10)) 
     username = Column(String(50), unique=True)  
     password = Column(String(100))  
     birthday = Column(DateTime)  
@@ -102,6 +103,7 @@ class DeliveryPersonnel(Base):
     
 #---------------------------------------
 Base.metadata.create_all(engine)
+
 
 
 

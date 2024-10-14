@@ -52,13 +52,6 @@ def dessert_menu():
     else:
         return redirect('/')
 
-@app.route('/deliverypage')
-def delivery_page():
-    if 'user_id' in session:
-        return render_template('deliverypage.html')
-    else:
-        return redirect('/')
-
 # Add pizza to the cart and redirect to main menu
 @app.route('/add_pizza', methods=['POST'])
 def add_pizza():
@@ -120,6 +113,20 @@ def cart():
     else:
         flash('Your cart is empty!', 'info')
         return redirect('/mainmenu')
+    
+@app.route('/delivery')
+def delivery():
+    if 'user_id' in session:
+        # Define available postal codes for delivery
+        postal_codes = ['12345', '54321', '67890', '09876', '11223']
+        
+        order = session.get('order', {'pizzas': [], 'drinks': [], 'desserts': []})
+        total_cost = round(sum(float(item['price']) for item in order['pizzas'] + order['drinks'] + order['desserts']), 2)
+
+        return render_template('delivery.html', order=order, total_cost=total_cost, postal_codes=postal_codes)
+    else:
+        return redirect('/mainmenu')
+
 
 @app.route('/remove_item', methods=['POST'])
 def remove_item():
@@ -145,15 +152,15 @@ def finalize_order(): # MAYBE ADD THE orderpizza, orderdrink, and orderdessert I
     if 'user_id' in session:
         total_cost = round(sum(float(item['price']) for item in session['order']['pizzas'] +
                               session['order']['drinks'] + session['order']['desserts']), 2)
-        print(total_cost)
+        
         postal_code = session.get('postal_code') 
-        print(postal_code)
-        print(session['username'])
+        address = request.form['address']
+        
         # Insert the order into the database
         if orderInsertLogic.insert_order(session['username'], total_cost, postal_code):
             flash('Order successfully placed!', 'success')
             session.pop('order', None)
-            return redirect('/deliverypage')  # Redirect to delivery page
+            return redirect('/delivery')  # Redirect to delivery page
         else:
             flash('Failed to place the order. Please try again.', 'danger')
 

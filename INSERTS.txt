@@ -26,9 +26,7 @@ with engine.connect() as conn:
         insert(Drinks),
         [
             {'drink_type': 'Water', "drink_cost": 2.99},
-            {'drink_type': 'Coca Cola', "drink_cost": 3.99},
             {'drink_type': 'Pepsi', "drink_cost": 3.98},
-            {'drink_type': 'Chocolate Milk', "drink_cost": 3.50},
             {'drink_type': 'Fanta', "drink_cost": 3.97},
         ]
     )
@@ -56,16 +54,3 @@ with engine.connect() as conn:
         ]
     )
     conn.commit()
-
-
-
-
-    // Example order object
-            const exampleOrder = {
-                pizzas: [{ name: "Margherita", price: 12.99 }],
-                drinks: [{ name: "Coke", price: 1.99 }],
-                desserts: [{ name: "Brownie", price: 3.49 }]
-            };
-
-            // Call the function with an example order
-            updateOrderOverview(exampleOrder);
