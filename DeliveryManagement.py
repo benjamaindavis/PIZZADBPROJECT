@@ -1,9 +1,9 @@
 from datetime import datetime, timedelta
-from tables import DeliveryPersonnel, CustomerOrder  # Assuming the correct path is 'tables'
+from tables import DeliveryPersonnel, CustomerOrder
 from sqlalchemy import func
 
 class DeliveryManagement: 
-    def __init__(self, session):  # Fixed __init__ method
+    def __init__(self, session):
         self.session = session
 
     def update_order_status(self, order_id, new_status):
@@ -36,7 +36,7 @@ class DeliveryManagement:
         
         personnel = self.session.query(DeliveryPersonnel).filter_by(
             postal_code_assigned = order.delivery_address, is_available = True
-        ).order_by(func.random()).first()  # Assigning random available delivery person
+        ).order_by(func.random()).first()
         
         if not personnel:
             return f"No available delivery personnel for Postal Code {order.delivery_address}"
@@ -70,7 +70,7 @@ class DeliveryManagement:
         ).all()
         
         if len(orders) > max_pizzas:
-            orders = orders[:max_pizzas]  # Limit 3 pizzas per batch
+            orders = orders[:max_pizzas]
 
         for order in orders:
             self.assign_delivery_person(order.order_id)

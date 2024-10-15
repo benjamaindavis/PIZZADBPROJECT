@@ -9,13 +9,11 @@ app = Flask(__name__)
 engine = create_engine('mysql+pymysql://root:toolbox@localhost/PizzaShop', echo=True)
 Session = sessionmaker(bind=engine)
 
-# Route to display the report form
 @app.route('/')
 def earnings_report_form():
     return render_template('earnings_report_form.html') 
 @app.route('/generate_report', methods=['POST'])
 def generate_earnings_report():
-    # Fetch form data from the request
     region = request.form.get('region')
     gender = request.form.get('gender')
     min_age = request.form.get('min_age')
@@ -23,13 +21,11 @@ def generate_earnings_report():
     start_date = request.form.get('start_date')
     end_date = request.form.get('end_date')
     
-    # Convert Dates
     start_date = datetime.strptime(start_date, '%Y-%m-%d') if start_date else None
     end_date = datetime.strptime(end_date, '%Y-%m-%d') if end_date else None
     
     session = Session()
     
-    # Get the current date
     current_date = datetime.now()
     
     query = session.query(
