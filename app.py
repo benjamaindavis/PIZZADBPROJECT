@@ -117,11 +117,11 @@ def cart():
 @app.route('/delivery')
 def delivery():
     if 'user_id' in session:
-        # Define available postal codes for delivery
-        postal_codes = ['12345', '54321', '67890', '09876', '11223']
-        
+        postal_codes = ['1234er', '5432ty', '6789gh', '0987ne', '1122io']
+
+        total_cost = session.get('total_cost', 0)
+
         order = session.get('order', {'pizzas': [], 'drinks': [], 'desserts': []})
-        total_cost = round(sum(float(item['price']) for item in order['pizzas'] + order['drinks'] + order['desserts']), 2)
 
         return render_template('delivery.html', order=order, total_cost=total_cost, postal_codes=postal_codes)
     else:
@@ -154,7 +154,7 @@ def finalize_order(): # MAYBE ADD THE orderpizza, orderdrink, and orderdessert I
                               session['order']['drinks'] + session['order']['desserts']), 2)
         
         postal_code = session.get('postal_code') 
-        address = request.form['address']
+        #address = session.get['postal_code']
         
         # Insert the order into the database
         if orderInsertLogic.insert_order(session['username'], total_cost, postal_code):
