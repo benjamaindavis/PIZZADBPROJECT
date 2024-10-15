@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, flash, session
 from sqlalchemy import create_engine, insert
-from tables import Customers, CustomerOrder, OrderPizza, OrderDrink, OrderDessert, Pizza, Drinks, Desserts
+from tables import Pizza, Drinks, Desserts
 from sqlalchemy.orm import sessionmaker
 from signup import signUp
 from login import login 
@@ -14,7 +14,7 @@ app.config['SECRET_KEY'] = 'bigboxofpizza'
 engine = create_engine('mysql+pymysql://root:toolbox@localhost/PizzaShop', echo=True)
 Session = sessionmaker(bind=engine)
 
-def format_item_name(name):  # for no more snake case in order reviews etc.
+def format_item_name(name): 
     return ' '.join(word.capitalize() for word in name.split('_'))
 
 app.jinja_env.globals.update(format_item_name=format_item_name)
@@ -26,7 +26,7 @@ def login_page():
 @app.route('/mainmenu')
 def mainmenu():
     if 'user_id' in session:
-        order = session.get('order', {'pizzas': [], 'drinks': [], 'desserts': []})  # Get order or empty
+        order = session.get('order', {'pizzas': [], 'drinks': [], 'desserts': []})
         return render_template('mainmenu.html', order=order)
     else:
         return redirect('/')
@@ -52,7 +52,6 @@ def dessert_menu():
     else:
         return redirect('/')
 
-# Add pizza to the cart and redirect to main menu
 @app.route('/add_pizza', methods=['POST'])
 def add_pizza():
     db_session = Session()
@@ -63,12 +62,11 @@ def add_pizza():
         session['order'] = {'pizzas': [], 'drinks': [], 'desserts': []}
 
     session['order']['pizzas'].append({'name': pizza_name, 'price': pizza.pizza_price})
-    session.modified = True  # Mark session as modified
+    session.modified = True 
 
     db_session.close()
     return redirect('/mainmenu')
 
-# Add drink to the cart
 @app.route('/add_drink', methods=['POST'])
 def add_drink():
     db_session = Session()
@@ -84,7 +82,6 @@ def add_drink():
     db_session.close()
     return redirect('/mainmenu')
 
-# Add dessert to the cart
 @app.route('/add_dessert', methods=['POST'])
 def add_dessert():
     db_session = Session()
@@ -100,13 +97,11 @@ def add_dessert():
     db_session.close()
     return redirect('/mainmenu')
 
-# Show the cart page
 @app.route('/cart')
 def cart():
     if 'order' in session:
         order = session['order']
-        
-        # Total cost
+    
         total_cost = round(sum(float(item['price']) for item in order['pizzas'] + order['drinks'] + order['desserts']), 2)        
         
         return render_template('cart.html', order=order, total_cost=total_cost)
@@ -148,23 +143,33 @@ def remove_item():
     return redirect('/cart')
 
 @app.route('/finalize_order', methods=['POST'])
-def finalize_order(): # MAYBE ADD THE orderpizza, orderdrink, and orderdessert INSERTIONG HERE AFTER THE ORDER IS EENT IN??????
+def finalize_order():
     if 'user_id' in session:
         total_cost = round(sum(float(item['price']) for item in session['order']['pizzas'] +
                               session['order']['drinks'] + session['order']['desserts']), 2)
         
-        postal_code = session.get('postal_code') 
-        #address = session.get['postal_code']
+        postal_code = session.get('postal_code')
         
-        # Insert the order into the database
         if orderInsertLogic.insert_order(session['username'], total_cost, postal_code):
+        
+        #if order_id: 
+            #for pizza in session['order']['pizzas']:
+                #orderInsertLogic.insert_order_pizza(order_id, pizza['pizza_id'], pizza['pizza_amount'])
+            
+            #for drink in session['order']['drinks']:
+                #orderInsertLogic.insert_order_drink(order_id, drink['drink_id'], drink['drink_amount'])
+            
+            #for dessert in session['order']['desserts']:
+                #orderInsertLogic.insert_order_dessert(order_id, dessert['dessert_id'], dessert['dessert_amount'])
+        
             flash('Order successfully placed!', 'success')
-            session.pop('order', None)
-            return redirect('/delivery')  # Redirect to delivery page
+            session.pop('order', None) 
+            return redirect('/delivery')
         else:
             flash('Failed to place the order. Please try again.', 'danger')
 
     return redirect('/mainmenu')
+
 
 @app.route('/login', methods=['POST'])
 def login_user():
@@ -175,7 +180,7 @@ def login_user():
     if user:
         session['user_id'] = user.customer_id
         session['username'] = user.username
-        session['postal_code'] = user.postal_code  # Store the user's postal code in the session
+        session['postal_code'] = user.postal_code
         flash('Successfully logged in!', 'success')
         return redirect('/mainmenu')
     else:
@@ -192,7 +197,6 @@ def signup():
         postal_code = request.form['postal_code']
 
         if signUp.signUp(full_name, username, password, birthday, postal_code):
-            # Store postal code and username in session
             session['username'] = username
             session['postal_code'] = postal_code
             flash('Sign up successful! You can now log in.', 'success')

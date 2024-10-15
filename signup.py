@@ -16,9 +16,9 @@ class signUp:
     def signUp(full_name: str, username: str, password: str, birthday: str, postal_code: str):
         hashed_password = signUp.hash_password(password)
 
-        session = Session()  # Create a new session for handling transactions
+        session = Session()  
         try:
-            # Check if username already exists
+            
             existing_user = session.execute(
                 select(Customers).where(Customers.username == username)
             ).fetchone()
@@ -27,7 +27,7 @@ class signUp:
                 print("Username is taken!")
                 return None
 
-            # Insert new customer
+            
             session.execute(insert(Customers).values(
                 full_name=full_name,
                 username=username,
@@ -37,14 +37,14 @@ class signUp:
                 postal_code=postal_code
             ))
 
-            session.commit()  # Commit the transaction
+            session.commit()  
             print("Signup successful!")
-            return True  # Return True to indicate success
+            return True  
 
         except Exception as e:
-            session.rollback()  # Rollback the transaction in case of error
+            session.rollback()  
             print(f"An error occurred: {e}")
-            return False  # Return False on failure
+            return False  
 
         finally:
-            session.close()  # Close the session
+            session.close()  
